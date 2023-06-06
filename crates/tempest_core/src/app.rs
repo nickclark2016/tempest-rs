@@ -9,14 +9,20 @@ use winit::{
 use tempest_ecs::world::World;
 use tempest_render::renderer::Renderer;
 
+/// Callback to be invoked on the start of an application.
 pub type ApplicationStartCallback = for<'a> fn(ctx: &mut AppContext<'a>);
+
+/// Callback to be invoked at every tick of an application.
 pub type ApplicationUpdateCallback = for<'a> fn(ctx: &mut AppContext<'a>);
+
+/// Callback to be invoked on the exitt of an application.
 pub type ApplicationStopCallback = for<'a> fn(ctx: &mut AppContext<'a>);
 
 struct WindowInfo {
     name: String,
 }
 
+/// Struct representing an application and its current state.
 pub struct App {
     world: World,
     on_start: Vec<Box<ApplicationStartCallback>>,
@@ -25,6 +31,21 @@ pub struct App {
     window_titles: Vec<WindowInfo>,
 }
 
+/// Builder used to create an application.
+/// 
+/// # Example
+/// ```rust
+/// use tempest_core::app::AppBuilder;
+/// 
+/// AppBuilder::default().with_window("Hello, World!")
+///     .on_app_start(|_| { println!("Started!"); })
+///     .on_app_update(|ctx| {
+///         println!("Updating!"); ctx.request_shutdown();
+///     })
+///     .on_app_close(|_| { println!("Closing!"); })
+///     .build()
+///     .run();
+/// ```
 #[derive(Default)]
 pub struct AppBuilder {
     on_start: Vec<Box<ApplicationStartCallback>>,
@@ -33,13 +54,19 @@ pub struct AppBuilder {
     windows: Vec<WindowInfo>,
 }
 
+/// Struct wrapping application context.  This is used to provide data from the app to user-defined callbacks.
+/// 
+/// ## Lifetimes
+/// - `<'a>` - Lifetime of the [App](App) created from
 pub struct AppContext<'a> {
     world: &'a mut World,
     events: &'a EventLoopWindowTarget<()>,
     renderers: &'a mut HashMap<WindowId, Renderer>,
+    shutdown_requested: bool,
 }
 
 impl<'a> AppContext<'a> {
+    /// Constructs a new instance of a context from a world, an event loop, and a set of renderers.
     pub fn new(
         world: &'a mut World,
         events: &'a EventLoopWindowTarget<()>,
@@ -49,17 +76,21 @@ impl<'a> AppContext<'a> {
             world: world,
             events: events,
             renderers: renderers,
+            shutdown_requested: false
         }
     }
 
+    /// Fetches an immutable reference to the world
     pub fn get_world(&self) -> &World {
         self.world
     }
 
+    /// Fetches a mutable reference to the world
     pub fn get_world_mut(&mut self) -> &mut World {
         self.world
     }
 
+    /// Creates a new window for the application with the provided name
     pub fn create_window(&mut self, name: &str) {
         assert!(!self
             .renderers
@@ -72,6 +103,7 @@ impl<'a> AppContext<'a> {
         self.renderers.insert(renderer.window().id(), renderer);
     }
 
+    /// Closes the window with the provided name
     pub fn close_window(&mut self, name: &str) {
         let id_opt = self
             .renderers
@@ -83,24 +115,33 @@ impl<'a> AppContext<'a> {
             self.renderers.remove(&id);
         }
     }
+
+    /// Requests the application to shut down
+    pub fn request_shutdown(&mut self) {
+        self.shutdown_requested = true;
+    }
 }
 
 impl AppBuilder {
+    /// Adds a callback to the built application to be invoked before entering the main application loop, but after the initialization of the application
     pub fn on_app_start(&mut self, start: ApplicationStartCallback) -> &mut Self {
         self.on_start.push(Box::new(start));
         self
     }
 
+    /// Adds a callback to the built application to be invoked after leaving the main application loop, but before destruction of the application
     pub fn on_app_close(&mut self, close: ApplicationStopCallback) -> &mut Self {
         self.on_stop.push(Box::new(close));
         self
     }
 
+    /// Adds a callback to the built application to be invoked on every tick of the application
     pub fn on_app_update(&mut self, update: ApplicationUpdateCallback) -> &mut Self {
         self.on_update.push(Box::new(update));
         self
     }
 
+    /// Adds a window to the built application with the provided name
     pub fn with_window(&mut self, name: &str) -> &mut Self {
         assert!(!self.windows.iter().any(|info| info.name == name));
 
@@ -110,6 +151,7 @@ impl AppBuilder {
         self
     }
 
+    /// Builds an application from the contents of the builder
     pub fn build(&mut self) -> App {
         App {
             world: World::default(),
@@ -134,6 +176,7 @@ impl Default for App {
 }
 
 impl App {
+    /// Runs the application.  This call assumes indefinite control the calling thread until destruction of the thread of application.
     pub fn run(self) {
         pollster::block_on(self.run_internal());
     }
@@ -210,6 +253,10 @@ impl App {
 
                     for cb in &self.on_update {
                         cb(&mut ctx);
+                    }
+
+                    if ctx.shutdown_requested {
+                        *control_flow = ControlFlow::Exit;
                     }
 
                     renderers.iter_mut().for_each(|(_, renderer)| {
