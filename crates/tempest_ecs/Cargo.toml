@@ -1,8 +1,0 @@
-[package]
-name = "tempest_ecs"
-version = "0.1.0-dev"
-edition = "2021"
-
-[dependencies]
-tempest_ecs_macros = { path = "./macros" }
-tempest_math = { path = "../tempest_math" }

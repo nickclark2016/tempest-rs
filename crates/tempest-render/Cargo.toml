@@ -1,11 +1,11 @@
 [package]
-name = "tempest_render"
+name = "tempest-render"
 version = "0.1.0-dev"
 edition = "2021"
 
 [dependencies]
-tempest_ecs = { path = "../tempest_ecs" }
-tempest_math = { path = "../tempest_math" }
+tempest-ecs = { path = "../tempest-ecs" }
+tempest-math = { path = "../tempest-math" }
 bytemuck = "1"
 env_logger = "0.10"
 handlebars = "4"

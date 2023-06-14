@@ -14,10 +14,10 @@ members = [
 resolver = "2"
 
 [dependencies]
-tempest_core = { path = "crates/tempest_core" }
-tempest_ecs = { path = "crates/tempest_ecs" }
-tempest_math = { path = "crates/tempest_math" }
-tempest_render = { path = "crates/tempest_render" }
+tempest-core = { path = "crates/tempest-core" }
+tempest-ecs = { path = "crates/tempest-ecs" }
+tempest-math = { path = "crates/tempest-math" }
+tempest-render = { path = "crates/tempest-render" }
 
 [[example]]
 name = "hello_world"

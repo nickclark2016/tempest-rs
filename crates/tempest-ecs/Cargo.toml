@@ -1,0 +1,8 @@
+[package]
+name = "tempest-ecs"
+version = "0.1.0-dev"
+edition = "2021"
+
+[dependencies]
+tempest-ecs-macros = { path = "./macros" }
+tempest-math = { path = "../tempest-math" }

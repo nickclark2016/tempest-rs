@@ -1449,42 +1449,42 @@ dependencies = [
 name = "tempest"
 version = "0.1.0-dev"
 dependencies = [
- "tempest_core",
- "tempest_ecs",
- "tempest_math",
- "tempest_render",
+ "tempest-core",
+ "tempest-ecs",
+ "tempest-math",
+ "tempest-render",
 ]
 
 [[package]]
-name = "tempest_common"
+name = "tempest-common"
 version = "0.1.0-dev"
 dependencies = [
- "tempest_math",
+ "tempest-math",
 ]
 
 [[package]]
-name = "tempest_core"
+name = "tempest-core"
 version = "0.1.0-dev"
 dependencies = [
  "env_logger",
  "log",
  "pollster",
- "tempest_common",
- "tempest_ecs",
- "tempest_render",
+ "tempest-common",
+ "tempest-ecs",
+ "tempest-render",
  "winit",
 ]
 
 [[package]]
-name = "tempest_ecs"
+name = "tempest-ecs"
 version = "0.1.0-dev"
 dependencies = [
- "tempest_ecs_macros",
- "tempest_math",
+ "tempest-ecs-macros",
+ "tempest-math",
 ]
 
 [[package]]
-name = "tempest_ecs_macros"
+name = "tempest-ecs-macros"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
@@ -1495,14 +1495,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "tempest_math"
+name = "tempest-math"
 version = "0.1.0-dev"
 dependencies = [
  "bytemuck",
 ]
 
 [[package]]
-name = "tempest_render"
+name = "tempest-render"
 version = "0.1.0-dev"
 dependencies = [
  "bytemuck",
@@ -1512,8 +1512,8 @@ dependencies = [
  "once_cell",
  "rust-embed",
  "serde",
- "tempest_ecs",
- "tempest_math",
+ "tempest-ecs",
+ "tempest-math",
  "wgpu",
  "winit",
 ]
