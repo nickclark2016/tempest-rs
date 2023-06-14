@@ -22,7 +22,6 @@ fn main() {
         .on_app_update(
             |ctx| {
                 for _ in ctx.get_world().entities().query_registry::<AppQuery>() {}
-                ctx.request_shutdown();
             },
         )
         .on_app_close(|_| ())

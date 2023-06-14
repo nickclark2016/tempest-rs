@@ -34,7 +34,7 @@ pub struct App {
 /// Builder used to create an application.
 /// 
 /// # Example
-/// ```rust
+/// ```no_run
 /// use tempest_core::app::AppBuilder;
 /// 
 /// AppBuilder::default().with_window("Hello, World!")

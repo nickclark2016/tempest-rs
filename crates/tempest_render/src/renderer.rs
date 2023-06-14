@@ -73,7 +73,7 @@ impl Renderer {
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Triangle Shader"),
-            source: wgpu::ShaderSource::Wgsl(include_str!("../data/triangle.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(include_str!("../data/shaders/triangle.wgsl").into()),
         });
 
         let render_pipeline_layout =

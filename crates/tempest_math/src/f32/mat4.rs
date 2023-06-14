@@ -1,3 +1,5 @@
+use bytemuck::{Pod, Zeroable};
+
 use super::vec4::Vec4;
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
@@ -5,6 +7,9 @@ use super::vec4::Vec4;
 pub struct Mat4 {
     pub arr: [f32; 16],
 }
+
+unsafe impl Pod for Mat4 {}
+unsafe impl Zeroable for Mat4 {}
 
 impl Mat4 {
     pub const fn from_array(src: [f32; 16]) -> Self {

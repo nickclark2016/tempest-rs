@@ -2,3 +2,6 @@
 name = "tempest_math"
 version = "0.1.0-dev"
 edition = "2021"
+
+[dependencies]
+bytemuck = "1"

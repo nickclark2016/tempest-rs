@@ -5,7 +5,13 @@ edition = "2021"
 
 [dependencies]
 tempest_ecs = { path = "../tempest_ecs" }
-winit = "0.28"
+tempest_math = { path = "../tempest_math" }
+bytemuck = "1"
 env_logger = "0.10"
+handlebars = "4"
 log = "0.4"
+once_cell = "1"
+rust-embed = { version = "6", features = ["interpolate-folder-path"] }
+serde = { version = "1", features = ["derive"] }
 wgpu = "0.15"
+winit = "0.28"

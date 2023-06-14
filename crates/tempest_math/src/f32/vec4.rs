@@ -1,5 +1,7 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, Mul, MulAssign, Sub, SubAssign};
 
+use bytemuck::{Pod, Zeroable};
+
 use super::{angle::Radians, vec2::Vec2, vec3::Vec3};
 
 #[derive(Clone, Copy, Debug, PartialEq, Default)]
@@ -10,6 +12,9 @@ pub struct Vec4 {
     pub z: f32,
     pub w: f32,
 }
+
+unsafe impl Pod for Vec4 {}
+unsafe impl Zeroable for Vec4 {}
 
 impl Vec4 {
     pub const ZERO: Self = Self::broadcast(0.0);
